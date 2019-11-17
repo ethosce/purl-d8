@@ -18,18 +18,24 @@ class ModifierIndex
     return array_reduce(array_map(array($this, 'getProviderModifiers'), Provider::loadMultiple()), 'array_merge', []);
   }
 
+  public function findModifiers() {
+    $modifiers = $this->findAll();
+    return $modifiers;
+  }
   /**
    * @param Provider $provider
    * @return Modifier[]
    */
   public function getProviderModifiers(Provider $provider)
   {
-    $modifiers = [];
-
+    static $modifiers = [];
+    if (count($modifiers) && count($modifiers[$provider->id()])) {
+      return $modifiers[$provider->id()];
+    }
     foreach ($provider->getProviderPlugin()->getModifierData() as $key => $value) {
-      $modifiers[] = new Modifier($key, $value, $provider->getMethodPlugin(), $provider);
+      $modifiers[$provider->id()][] = new Modifier($key, $value, $provider->getMethodPlugin(), $provider);
     }
 
-    return $modifiers;
+    return $modifiers[$provider->id()];
   }
 }

@@ -16,5 +16,15 @@ use Symfony\Component\HttpFoundation\Request;
  */
 interface RequestAlteringInterface
 {
-    public function alterRequest(Request $request, $identifier);
+   /**
+    * Allow for altering the request when the RequestSubscriber event fires.
+    *
+    * @param \Symfony\Component\HttpFoundation\Request $request
+    * @param $identifier
+    *
+    * @return \Symfony\Component\HttpFoundation\Request|false
+    * Return the request or FALSE if the request was not altered.
+    *
+    */
+   public function alterRequest(Request $request, $identifier);
 }

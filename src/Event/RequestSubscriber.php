@@ -86,8 +86,12 @@ class RequestSubscriber implements EventSubscriberInterface
     foreach ($matches as $match) {
 
       if ($match['method'] instanceof RequestAlteringInterface) {
+        $oldrequest = $request;
         $request = $request->duplicate();
-        $match['method']->alterRequest($request, $match['modifier']);
+        $newrequest = $match['method']->alterRequest($request, $match['modifier']);
+        if (!$newrequest) {
+          $request = $oldrequest;
+        }
       }
     }
 
@@ -104,7 +108,7 @@ class RequestSubscriber implements EventSubscriberInterface
 
       $request->attributes->set('purl.matched_modifiers', $matches);
 
-      if ($match['method'] instanceof RequestAlteringInterface) {
+      if ($match['method'] instanceof RequestAlteringInterface && $newrequest) {
         $response = $event->getKernel()
           ->handle($request, HttpKernelInterface::SUB_REQUEST);
         if ($response) {

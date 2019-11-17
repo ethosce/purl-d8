@@ -1,0 +1,12 @@
+{
+  "name": "freelock/purl",
+  "type": "drupal-module",
+  "description": "Purl module for D8, with patches needed to support group_content",
+  "authors": [
+    {
+      "name": "John Locke",
+      "email": "john@freelock.com"
+    }
+  ],
+  "require": {}
+}

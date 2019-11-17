@@ -24,11 +24,23 @@ class PathPrefixMethod extends MethodAbstract implements MethodInterface, Reques
         return strpos($path, '/' . $modifier) === 0;
     }
 
+    /**
+     * Allow for altering the request when the RequestSubscriber event fires.
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param $identifier
+     *
+     * @return \Symfony\Component\HttpFoundation\Request|false
+     * Return the request or FALSE if the request was not altered.
+     *
+     */
     public function alterRequest(Request $request, $identifier)
     {
         $uri = $request->server->get('REQUEST_URI');
         $newPath = substr($uri, strlen($identifier) + 1);
         $request->server->set('REQUEST_URI', $newPath);
+
+        return $request;
     }
 
     public function enterContext($modifier, $path, array &$options)
