@@ -51,7 +51,7 @@ entity.purl_provider.add_form:
     _permission: 'administer site configuration'
 
 entity.purl_provider.edit_form:
-  path: '/admin/config/search/pur/provider/{purl_provider}'
+  path: '/admin/config/search/purl/provider/{purl_provider}'
   defaults:
     _entity_form: 'purl_provider.edit'
     _title: 'Edit PURL Provider'
