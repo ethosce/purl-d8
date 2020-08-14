@@ -17,8 +17,8 @@ use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class RequestSubscriber implements EventSubscriberInterface
-{
+class RequestSubscriber implements EventSubscriberInterface {
+
   /**
    * @var ModifierIndex
    */
@@ -32,14 +32,12 @@ class RequestSubscriber implements EventSubscriberInterface
   public function __construct(
     ModifierIndex $modifierIndex,
     MatchedModifiers $matchedModifiers
-  )
-  {
+  ) {
     $this->modifierIndex = $modifierIndex;
     $this->matchedModifiers = $matchedModifiers;
   }
 
-  public static function getSubscribedEvents()
-  {
+  public static function getSubscribedEvents() {
     return array(
       // RouterListener comes in at 32. We need to go before it.
       KernelEvents::REQUEST => array('onRequest', 50),
@@ -49,18 +47,15 @@ class RequestSubscriber implements EventSubscriberInterface
   /**
    * @return \Drupal\purl\Modifier[]
    */
-  protected function getModifiers()
-  {
+  protected function getModifiers() {
     return $this->modifierIndex->findAll();
   }
 
-  protected function getMethodForProvider($providerId)
-  {
+  protected function getMethodForProvider($providerId) {
     return Provider::load($providerId)->getMethodPlugin();
   }
 
-  public function onRequest(GetResponseEvent $event, $eventName, EventDispatcherInterface $dispatcher)
-  {
+  public function onRequest(GetResponseEvent $event, $eventName, EventDispatcherInterface $dispatcher) {
     $request = $event->getRequest();
     $modifiers = $this->getModifiers();
 

@@ -2,6 +2,7 @@
 
 namespace Drupal\purl\Controller;
 
+use Drupal\Core\Url;
 use Drupal\purl\Plugin\ProviderManager;
 use Drupal\purl\Plugin\MethodPluginManager;
 use Drupal\purl\Plugin\ModifierIndex;
@@ -116,7 +117,7 @@ class ProvidersController extends BaseController
       '#tag' => 'form',
       '#attributes' => array(
         'method' => 'POST',
-        'action' => \Drupal::url('purl.admin.save_providers_config'),
+        'action' => Url::fromRoute('purl.admin.save_providers_config')->toString(),
       ),
     );
 
@@ -134,7 +135,7 @@ class ProvidersController extends BaseController
       'table' => $tableData,
       'submit' => $submitData,
     );
-    $form = drupal_render($formContents);
+    $form = \Drupal::service('renderer')->render($formContents);
 
     $build['providers_settings_form']['#value'] = $form;
 

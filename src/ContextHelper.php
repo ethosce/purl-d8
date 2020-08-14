@@ -5,7 +5,9 @@ namespace Drupal\purl;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\purl\Entity\Provider;
+use Drupal\purl\Plugin\ModifierIndex;
 use Drupal\purl\Plugin\Purl\Method\MethodInterface;
+use Drupal\purl\Plugin\Purl\Method\PreGenerateHookInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class ContextHelper
@@ -16,9 +18,8 @@ class ContextHelper
    */
   protected $storage;
 
-  public function __construct(EntityStorageInterface $storage)
+  public function __construct()
   {
-    $this->storage = $storage;
   }
 
   /**
@@ -69,7 +70,7 @@ class ContextHelper
     /** @var Context $context */
     foreach ($contexts as $context) {
 
-      if (!in_array(MethodInterface::STAGE_PRE_GENERATE, $context->getMethod()->getStages())) {
+      if (!in_array(MethodInterface::STAGE_PRE_GENERATE, $context->getMethod()->getStages()) || !($context->getMethod() instanceof PreGenerateHookInterface)) {
         continue;
       }
 
@@ -105,10 +106,18 @@ class ContextHelper
       return [];
     }
 
-    $providers = $this->storage->loadMultiple(array_keys($map));
+    $providers = $this->getStorage()->loadMultiple(array_keys($map));
 
     return array_map(function (Provider $provider) use ($map) {
       return new Context($map[$provider->id()], $provider->getMethodPlugin());
     }, $providers);
+  }
+
+  protected function getStorage() : EntityStorageInterface {
+    if (empty($this->storage)) {
+      $this->storage = \Drupal::entityTypeManager ()->getStorage('purl_provider');
+    }
+
+    return $this->storage;
   }
 }

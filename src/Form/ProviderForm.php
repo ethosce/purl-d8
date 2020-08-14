@@ -94,12 +94,12 @@ class ProviderForm extends EntityForm
         $status = $provider->save();
 
         if ($status) {
-            drupal_set_message($this->t('Saved the %label provider.', array(
+            $this->messenger()->addStatus($this->t('Saved the %label provider.', array(
                 '%label' => $provider->getLabel(),
             )));
         }
         else {
-            drupal_set_message($this->t('The %label provider was not saved.', array(
+            $this->messenger()->addStatus($this->t('The %label provider was not saved.', array(
                 '%label' => $provider->getLabel(),
             )));
         }
