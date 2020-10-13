@@ -32,6 +32,7 @@ class ModifierIndex
     if (count($modifiers) && count($modifiers[$provider->id()])) {
       return $modifiers[$provider->id()];
     }
+    $modifiers[$provider->id()] = [];
     foreach ($provider->getProviderPlugin()->getModifierData() as $key => $value) {
       $modifiers[$provider->id()][] = new Modifier($key, $value, $provider->getMethodPlugin(), $provider);
     }
