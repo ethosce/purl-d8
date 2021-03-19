@@ -1,6 +1,6 @@
 {
   "name": "ethosce/purl",
   "type": "drupal-module",
-  "description": "Purl module for D8, with patches needed to support group_content",
+  "description": "Persistent URL module for Drupal 8+",
   "require": {}
 }
